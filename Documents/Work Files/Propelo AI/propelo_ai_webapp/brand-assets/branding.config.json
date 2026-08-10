@@ -1,0 +1,17 @@
+{
+  "web": {
+    "logo": "logos/propelo-logo.svg",
+    "full": "logos/full-logo.png",
+    "banner": "logos/logo-banner.png",
+    "icon": "logos/logo-icon.png"
+  },
+  "extension": {
+    "logo": "logos/propelo-logo.svg",
+    "full": "logos/full-logo.png",
+    "banner": "logos/logo-banner.png",
+    "icon": "logos/logo-icon.png"
+  },
+  "notes": {
+    "replace_signals": "Place high-res PNG/SVG versions inside brand-assets/logos and run the apply script to copy them into app 'public' and extension asset folders."
+  }
+}

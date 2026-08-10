@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Odlua notification icon - House with bowl, steam and heart
+    White silhouette for Android status bar notification icon.
+    The green accent color (#197533) is applied via notification's color property.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    
+    <!-- House outline (roof pointing up) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50,5 L98,50 L80,50 L80,95 L20,95 L20,50 L2,50 Z"/>
+    
+    <!-- Bowl (cutout - will show status bar color) -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M30,60 C30,75 40,82 50,82 C60,82 70,75 70,60 C70,55 60,52 50,52 C40,52 30,55 30,60 Z"/>
+    
+    <!-- Left steam wave -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M40,35 Q36,42 42,50"
+        android:strokeWidth="4"
+        android:strokeColor="#00000000"/>
+    
+    <!-- Right steam wave -->
+    <path
+        android:fillColor="#00000000"  
+        android:pathData="M55,35 Q51,42 57,50"
+        android:strokeWidth="4"
+        android:strokeColor="#00000000"/>
+    
+    <!-- Heart at top -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M50,28 C46,24 40,25 40,31 C40,37 50,44 50,44 C50,44 60,37 60,31 C60,25 54,24 50,28 Z"/>
+</vector>

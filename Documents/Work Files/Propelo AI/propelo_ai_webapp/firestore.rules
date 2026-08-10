@@ -1,0 +1,86 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated and matches the userId
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Helper to check if the request is trying to modify restricted fields
+    // Returns true if ONLY allowed fields are being modified
+    function onlyUpdatingAllowedFields(allowedFields) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(allowedFields);
+    }
+
+    // User documents
+    // Users can read their own data
+    // Users can ONLY update specific profile fields. They CANNOT update subscription/limit fields.
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      
+      // Allow create only via Admin SDK (backend) which bypasses these rules.
+      // We DENY create from client-side to enforce server-side initialization.
+      allow create: if false;
+
+      // Allow updates only to profile fields
+      allow update: if isOwner(userId) 
+        && onlyUpdatingAllowedFields([
+          'firstName', 'lastName', 'bio', 'primarySpecialization', 
+          'yearsOfExperience', 'preferredHourlyRate', 'skills', 
+          'languages', 'profileImage', 'preferredTone', 'customTone',
+          'preferences', 'reengageStages', 'updatedAt'
+        ]);
+
+      // Deny delete (safety)
+      allow delete: if false;
+      
+      // Platform Accounts Subcollection
+      match /platformAccounts/{platform} {
+        allow read: if isOwner(userId);
+        allow write: if isOwner(userId); // Users manage their connected accounts
+      }
+      
+      // Proposal Tracking Subcollection
+      match /proposalTracking/{proposalId} {
+        allow read: if isOwner(userId);
+        allow write: if isOwner(userId);
+      }
+
+      // Proposals Subcollection
+      match /proposals/{proposalId} {
+        allow read: if isOwner(userId);
+        // We allow users to create proposals as that is the core function
+        // But we might want to validate the structure
+        allow create: if isOwner(userId)
+           && request.resource.data.userId == userId;
+           
+        allow update: if isOwner(userId);
+        allow delete: if isOwner(userId);
+      }
+      
+      // Clients Subcollection
+      match /clients/{clientId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      // Snippets Subcollection
+      match /snippets/{snippetId} {
+        allow read, write: if isOwner(userId);
+      }
+      
+      // Analytics Subcollection
+      match /analytics/{docId} {
+        allow read: if isOwner(userId);
+        // Analytics updates usually happen via server or specific events, 
+        // but if client tracks opens, we allow it for now.
+        allow write: if isOwner(userId); 
+      }
+    }
+    
+    // Prevent unauthorized access to all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "output_dir": "assets/i18n",
+  "input_file_pattern": "assets/i18n/*.json",
+  "default_locale": "en",
+  "fallback_strategy": "base_locale"
+}

@@ -1,0 +1,89 @@
+{
+  "manifest_version": 3,
+  "name": "Propelo - AI Proposal Generator",
+  "version": "1.0.0",
+  "description": "Auto-generate winning proposals for Upwork, Fiverr, and Freelancer",
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "scripting"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["fonts/*", "assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "host_permissions": [
+    "*://*.upwork.com/*",
+    "*://*.fiverr.com/*",
+    "*://*.freelancer.com/*",
+    "https://app.propeloai.com/*",
+    "https://propeloai.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.upwork.com/jobs/*",
+        "*://*.upwork.com/*/jobs/*",
+        "*://www.upwork.com/jobs/view/*",
+        "*://www.upwork.com/ab/proposals/job/*",
+        "*://www.upwork.com/freelance-jobs/apply/*",
+        "*://*.upwork.com/freelance-jobs/*",
+        "*://*.upwork.com/freelancers/*",
+        "*://*.upwork.com/ab/profiles/*",
+        "*://*.upwork.com/proposals*",
+        "*://*.upwork.com/nx/proposals*",
+        "*://*.upwork.com/nx/find-work/profile*",
+        "*://*.upwork.com/fl/*"
+      ],
+      "js": ["content-upwork.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "*://*.fiverr.com/gigs/*",
+        "*://*.fiverr.com/*/gigs/*",
+        "*://*.fiverr.com/users/*",
+        "*://*.fiverr.com/sellers/*"
+      ],
+      "js": ["content-fiverr.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "*://*.freelancer.com/projects/*",
+        "*://*.freelancer.com/*/projects/*"
+      ],
+      "js": ["content-freelancer.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://app.propeloai.com/*",
+        "https://propeloai.com/*",
+        "https://www.propeloai.com/*"
+      ],
+      "js": ["content-auth-sync.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

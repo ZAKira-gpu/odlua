@@ -1,0 +1,64 @@
+# ── Secrets & Signing (never commit) ──
+android/key.properties
+android/app/*.jks
+functions/service-account.json
+.env
+.env.*
+
+# ── Firebase platform configs (regenerate per-project) ──
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist
+lib/firebase_options.dart
+
+# ── OS & Editor ──
+Icon?
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# ── IDE ──
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# ── Flutter / Dart / Pub ──
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+ios/Pods/
+ios/.symlinks/
+
+# ── Cloud Functions ──
+functions/node_modules/
+functions/build/
+
+# ── Symbolication ──
+app.*.symbols
+
+# ── Obfuscation ──
+app.*.map.json
+
+# ── Android build artifacts ──
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# ── Local config (machine-specific paths) ──
+android/local.properties

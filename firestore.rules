@@ -1,0 +1,166 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // App config - public read for version checks (no auth required)
+    match /app_config/{configId} {
+      allow read: if true;
+      allow write: if false; // Admin-only via console
+    }
+    
+    // App banners - public read for home banner carousel
+    match /app_banners/{bannerId} {
+      allow read: if true;
+      allow write: if false; // Admin-only via console
+    }
+    
+    // Users collection - users can read/write their own data
+    match /users/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+      
+      // Saved addresses subcollection (with underscore)
+      match /saved_addresses/{addressId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    // Dishes collection - authenticated users can read all, write their own
+    match /dishes/{dishId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && 
+        (request.resource.data.chefId == request.auth.uid || 
+         request.resource.data.chefID == request.auth.uid);
+      // Chef can update their own dishes (full update)
+      allow update: if request.auth != null && 
+        (resource.data.chefId == request.auth.uid || 
+         resource.data.chefID == request.auth.uid);
+      // Customers can update ONLY stock-related fields (for order placement)
+      allow update: if request.auth != null &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock', 'availableStock', 'updatedAt']);
+      allow delete: if request.auth != null && 
+        (resource.data.chefId == request.auth.uid || 
+         resource.data.chefID == request.auth.uid);
+    }
+    
+    // Orders collection
+    match /orders/{orderId} {
+      allow read: if request.auth != null && 
+        (resource.data.customerId == request.auth.uid || 
+         resource.data.chefId == request.auth.uid ||
+         resource.data.userID == request.auth.uid || 
+         resource.data.chefID == request.auth.uid);
+      allow create: if request.auth != null && 
+        (request.resource.data.customerId == request.auth.uid ||
+         request.resource.data.userID == request.auth.uid);
+      allow update: if request.auth != null && 
+        (resource.data.customerId == request.auth.uid || 
+         resource.data.chefId == request.auth.uid ||
+         resource.data.userID == request.auth.uid || 
+         resource.data.chefID == request.auth.uid);
+    }
+    
+    // OrderLocations collection - TIER 3 exact location sharing
+    // Only accessible after order is confirmed, by buyer and chef involved
+    match /orderLocations/{orderLocationId} {
+      // Allow read if user is the buyer or chef in the corresponding order
+      allow read: if request.auth != null && (
+        // Check if document exists and user is buyer or chef
+        (resource != null && (resource.data.buyerId == request.auth.uid || resource.data.chefId == request.auth.uid)) ||
+        // Or check the corresponding order document (orderLocationId == orderId)
+        (exists(/databases/$(database)/documents/orders/$(orderLocationId)) &&
+         (get(/databases/$(database)/documents/orders/$(orderLocationId)).data.customerId == request.auth.uid ||
+          get(/databases/$(database)/documents/orders/$(orderLocationId)).data.chefId == request.auth.uid ||
+          get(/databases/$(database)/documents/orders/$(orderLocationId)).data.userID == request.auth.uid ||
+          get(/databases/$(database)/documents/orders/$(orderLocationId)).data.chefID == request.auth.uid))
+      );
+      // Only Cloud Functions can create/update (security)
+      allow write: if false;
+    }
+    
+    // Messages collection
+    match /messages/{messageId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Chats collection
+    match /chats/{chatId} {
+      allow read: if request.auth != null && 
+        request.auth.uid in resource.data.participants;
+      allow create: if request.auth != null && 
+        request.auth.uid in request.resource.data.participants;
+      allow update: if request.auth != null && 
+        request.auth.uid in resource.data.participants;
+      
+      // Chat messages subcollection
+      match /messages/{messageId} {
+        allow read: if request.auth != null && 
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow create: if request.auth != null && 
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow update, delete: if request.auth != null && 
+          (resource.data.senderId == request.auth.uid ||
+           request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants);
+      }
+      
+      // Typing indicators subcollection
+      match /typing/{userId} {
+        allow read: if request.auth != null && 
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow write: if request.auth != null && 
+          request.auth.uid == userId &&
+          request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow delete: if request.auth != null && 
+          request.auth.uid == userId;
+      }
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow write: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+    
+    // Reviews collection
+    match /reviews/{reviewId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.userID == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userID == request.auth.uid;
+    }
+    
+    // Custom dish requests
+    match /customDishRequests/{requestId} {
+      allow read: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || resource.data.chefId == request.auth.uid);
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || resource.data.chefId == request.auth.uid);
+    }
+    
+    // Reports collection - for reporting messages
+    match /reports/{reportId} {
+      // Users can read their own reports
+      allow read: if request.auth != null && resource.data.reporterId == request.auth.uid;
+      // Anyone authenticated can create a report
+      allow create: if request.auth != null && request.resource.data.reporterId == request.auth.uid;
+      // Only the reporter can update their report
+      allow update: if request.auth != null && resource.data.reporterId == request.auth.uid;
+      // No one can delete reports
+      allow delete: if false;
+    }
+    
+    // User reports collection - for reporting users
+    match /user_reports/{reportId} {
+      // Users can read their own reports
+      allow read: if request.auth != null && resource.data.reporterId == request.auth.uid;
+      // Anyone authenticated can create a user report
+      allow create: if request.auth != null && request.resource.data.reporterId == request.auth.uid;
+      // Only the reporter can update their report
+      allow update: if request.auth != null && resource.data.reporterId == request.auth.uid;
+      // No one can delete user reports
+      allow delete: if false;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "226120819485",
+    "project_id": "odlua-139c3",
+    "storage_bucket": "odlua-139c3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226120819485:android:d264fcb2bbdbbb89b237f4",
+        "android_client_info": {
+          "package_name": "com.app.odlua"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT1-OjyCqfEYZNCX0Y-opW33qJSwh3Zjc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
