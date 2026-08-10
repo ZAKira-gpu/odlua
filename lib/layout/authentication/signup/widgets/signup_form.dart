@@ -498,21 +498,6 @@ class _SignupFormState extends State<SignupForm> {
     );
   }
 
-  void _showSuccessSnackbar(String message) {
-    if (!mounted) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
   void _showTermsDialog() {
     showDialog(
       context: context,
