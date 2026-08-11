@@ -136,19 +136,22 @@ class _SignupFormState extends State<SignupForm> {
       return false;
     }
 
-    // Phone validation (optional but if entered, must be valid)
+    // Phone validation (required)
     final phone = _phoneController.text.trim();
-    if (phone.isNotEmpty) {
-      if (!phone.startsWith('+')) {
-        _formKey.currentState!.validate();
-        _scrollToAndFocus(_basicInfoKey, _phoneFocus);
-        return false;
-      }
-      if (phone.length < 9 || phone.length > 16) {
-        _formKey.currentState!.validate();
-        _scrollToAndFocus(_basicInfoKey, _phoneFocus);
-        return false;
-      }
+    if (phone.isEmpty) {
+      _formKey.currentState!.validate();
+      _scrollToAndFocus(_basicInfoKey, _phoneFocus);
+      return false;
+    }
+    if (!phone.startsWith('+')) {
+      _formKey.currentState!.validate();
+      _scrollToAndFocus(_basicInfoKey, _phoneFocus);
+      return false;
+    }
+    if (phone.length < 9 || phone.length > 16) {
+      _formKey.currentState!.validate();
+      _scrollToAndFocus(_basicInfoKey, _phoneFocus);
+      return false;
     }
 
     if (!_formKey.currentState!.validate()) {
@@ -1070,27 +1073,22 @@ class _SignupFormState extends State<SignupForm> {
                       _PhonePlusFormatter(),
                     ],
                     validator: (value) {
-                      if (value != null && value.isNotEmpty) {
-                        if (!value.startsWith('+')) {
-                          return 'phone_must_start_with_plus'.tr();
-                        }
-                        final digits =
-                            value.replaceAll(RegExp(r'[^\d]'), '');
-                        if (digits.length < 7) {
-                          return 'invalid_phone_number'.tr();
-                        }
-                        if (digits.length > 15) {
-                          return 'phone_number_too_long'.tr();
-                        }
+                      if (value == null || value.isEmpty) {
+                        return 'please_enter_phone_number'.tr();
+                      }
+                      if (!value.startsWith('+')) {
+                        return 'phone_must_start_with_plus'.tr();
+                      }
+                      final digits =
+                          value.replaceAll(RegExp(r'[^\d]'), '');
+                      if (digits.length < 7) {
+                        return 'invalid_phone_number'.tr();
+                      }
+                      if (digits.length > 15) {
+                        return 'phone_number_too_long'.tr();
                       }
                       return null;
                     },
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'phone_optional_hint'.tr(),
-                    style:
-                        TextStyle(fontSize: 13, color: Colors.grey.shade600),
                   ),
                   const SizedBox(height: 20),
 
