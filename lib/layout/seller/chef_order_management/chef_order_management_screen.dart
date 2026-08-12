@@ -9,7 +9,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import 'package:odlua/utils/theme/custom_themes/main_colors.dart';
 import 'package:odlua/utils/helpers/debug_helper.dart';
 import 'package:odlua/utils/services/chat_service.dart';
