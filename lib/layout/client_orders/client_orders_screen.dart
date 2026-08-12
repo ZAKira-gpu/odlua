@@ -658,8 +658,6 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
                       counterText: '',
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
