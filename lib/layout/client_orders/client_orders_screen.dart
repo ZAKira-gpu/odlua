@@ -660,12 +660,6 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'order.cancel_confirm'.tr(),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
@@ -674,7 +668,16 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
                           ? null
                           : () async {
                               final reason = _reasonController.text.trim();
-                              // Reason is optional for buyers
+                              if (reason.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text('order.cancel_reason_required'.tr()),
+                                    backgroundColor: Colors.orange,
+                                  ),
+                                );
+                                return;
+                              }
                               setState(() => _isLoading = true);
 
                               try {
@@ -682,8 +685,7 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
                                   'status': 'cancelled',
                                   'updatedAt': FieldValue.serverTimestamp(),
                                   'cancelledBy': 'consumer',
-                                  if (reason.isNotEmpty)
-                                    'cancellationReason': reason,
+                                  'cancellationReason': reason,
                                 };
 
                                 await _firestore

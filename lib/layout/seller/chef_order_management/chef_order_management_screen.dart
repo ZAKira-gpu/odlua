@@ -399,15 +399,23 @@ class _ChefOrderManagementScreenState extends State<ChefOrderManagementScreen>
                       // Action Buttons
                       Row(
                         children: [
-                          if (status == 'pending')
+                          if (status == 'pending') ...[
                             Expanded(
-                                child: _buildActionButton(
-                                    'start_preparing'.tr(),
-                                    Icons.play_arrow_rounded,
-                                    mainColor,
-                                    () => _updateOrderStatus(
-                                        orderId, 'preparing')))
-                          else if (status == 'preparing')
+                              child: _buildActionButton(
+                                'confirm_order'.tr(),
+                                Icons.check_circle_outline,
+                                Colors.green,
+                                () => _updateOrderStatus(orderId, 'preparing'),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            _buildIconActionButton(
+                              Icons.cancel_outlined,
+                              Colors.red.shade50,
+                              Colors.red,
+                              () => _showCancellationBottomSheet(orderId, orderData),
+                            ),
+                          ] else if (status == 'preparing')
                             Expanded(
                                 child: _buildActionButton(
                                     'mark_ready'.tr(),
@@ -544,6 +552,201 @@ class _ChefOrderManagementScreenState extends State<ChefOrderManagementScreen>
       }
     } catch (e) {
       DebugHelper.logError('Error updating order: $e');
+    }
+  }
+
+  void _showCancellationBottomSheet(
+      String orderId, Map<String, dynamic> orderData) {
+    String? selectedReason;
+    final TextEditingController customReasonController =
+        TextEditingController();
+    bool isSubmitting = false;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'order.cancel_order'.tr(),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'order.cancel_confirm'.tr(),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Radio<String>(
+                      value: 'order.cancel_reason_distance'.tr(),
+                      groupValue: selectedReason,
+                      onChanged: (v) => setSheetState(() {
+                        selectedReason = v;
+                        customReasonController.clear();
+                      }),
+                      activeColor: Colors.red,
+                    ),
+                    title: Text('order.cancel_reason_distance'.tr()),
+                    onTap: () => setSheetState(() {
+                      selectedReason = 'order.cancel_reason_distance'.tr();
+                      customReasonController.clear();
+                    }),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Radio<String>(
+                      value: 'other',
+                      groupValue: selectedReason,
+                      onChanged: (v) => setSheetState(() => selectedReason = v),
+                      activeColor: Colors.red,
+                    ),
+                    title: Text('order.cancel_reason_other'.tr()),
+                    onTap: () => setSheetState(() => selectedReason = 'other'),
+                  ),
+                  if (selectedReason == 'other') ...[
+                    const SizedBox(height: 4),
+                    TextField(
+                      controller: customReasonController,
+                      maxLength: 200,
+                      maxLines: 3,
+                      onChanged: (_) => setSheetState(() {}),
+                      decoration: InputDecoration(
+                        labelText: 'order.cancel_reason_write'.tr(),
+                        border: const OutlineInputBorder(),
+                        counterText:
+                            '${customReasonController.text.length}/200',
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: isSubmitting
+                          ? null
+                          : () async {
+                              if (selectedReason == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text('order.cancel_reason_required'.tr()),
+                                    backgroundColor: Colors.orange,
+                                  ),
+                                );
+                                return;
+                              }
+                              final finalReason = selectedReason == 'other'
+                                  ? customReasonController.text.trim()
+                                  : selectedReason!;
+                              if (selectedReason == 'other' &&
+                                  finalReason.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content:
+                                        Text('order.cancel_reason_required'.tr()),
+                                    backgroundColor: Colors.orange,
+                                  ),
+                                );
+                                return;
+                              }
+                              setSheetState(() => isSubmitting = true);
+                              Navigator.pop(context);
+                              await _cancelOrder(orderId, orderData, finalReason);
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: isSubmitting
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          : Text('order.cancel_order'.tr()),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _cancelOrder(
+      String orderId, Map<String, dynamic> orderData, String reason) async {
+    try {
+      await _firestore.collection('orders').doc(orderId).update({
+        'status': 'cancelled',
+        'cancelledBy': 'chef',
+        'cancellationReason': reason,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      // Restore stock
+      try {
+        final dishId = orderData['dishId']?.toString();
+        final quantity = (orderData['quantity'] as num?)?.toInt();
+        if (dishId != null && quantity != null && quantity > 0) {
+          await _firestore.collection('dishes').doc(dishId).update({
+            'stock': FieldValue.increment(quantity),
+            'availableStock': FieldValue.increment(quantity),
+          });
+        }
+      } catch (e) {
+        DebugHelper.log('Stock restore error: $e');
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('order_cancelled'.tr()),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      DebugHelper.logError('Error cancelling order: $e');
     }
   }
 
