@@ -433,12 +433,6 @@ class _ChefOrderManagementScreenState extends State<ChefOrderManagementScreen>
                           if (status != 'completed') ...[
                             const SizedBox(width: 12),
                             _buildIconActionButton(
-                                Icons.phone_rounded,
-                                Colors.grey.shade100,
-                                Colors.black87,
-                                () => _callCustomer(orderId, orderData)),
-                            const SizedBox(width: 12),
-                            _buildIconActionButton(
                                 Icons.chat_bubble_outline_rounded,
                                 Colors.grey.shade100,
                                 Colors.black87,
@@ -750,33 +744,7 @@ class _ChefOrderManagementScreenState extends State<ChefOrderManagementScreen>
     }
   }
 
-  Future<void> _callCustomer(
-      String orderId, Map<String, dynamic> orderData) async {
-    // First try: use denormalized consumerPhone from reservation
-    final consumerPhone = orderData['consumerPhone']?.toString();
-    if (consumerPhone != null && consumerPhone.isNotEmpty) {
-      if (await canLaunchUrl(Uri.parse('tel:$consumerPhone'))) {
-        await launchUrl(Uri.parse('tel:$consumerPhone'));
-        return;
-      }
-    }
 
-    // Fallback: fetch from user document (for backward compatibility)
-    final customerId = orderData['customerId'];
-    if (customerId != null) {
-      try {
-        final userDoc =
-            await _firestore.collection('users').doc(customerId).get();
-        final phone =
-            userDoc.data()?['phone'] ?? userDoc.data()?['phoneNumber'];
-        if (phone != null && await canLaunchUrl(Uri.parse('tel:$phone'))) {
-          await launchUrl(Uri.parse('tel:$phone'));
-        }
-      } catch (e) {
-        DebugHelper.log('Error fetching customer phone for call: $e');
-      }
-    }
-  }
 
   Future<void> _messageCustomer(Map<String, dynamic> orderData) async {
     final customerId = orderData['customerId'];

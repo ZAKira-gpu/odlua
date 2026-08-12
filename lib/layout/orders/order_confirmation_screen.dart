@@ -175,20 +175,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
     }
   }
 
-  Future<void> _callChef() async {
-    final phone = _locationData?['chefPhone'];
-    if (phone == null || phone.isEmpty) {
-      _showSnackBar('Phone number not available', isError: true);
-      return;
-    }
 
-    final uri = Uri.parse('tel:$phone');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      _showSnackBar('Could not make call', isError: true);
-    }
-  }
 
   Future<void> _messageChef() async {
     if (_orderData == null) return;
@@ -775,16 +762,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen>
           const SizedBox(height: 16),
           Row(
             children: [
-              if (hasPhone)
-                Expanded(
-                  child: _buildActionButton(
-                    icon: Icons.phone,
-                    label: 'Call',
-                    color: Colors.green,
-                    onTap: _callChef,
-                  ),
-                ),
-              if (hasPhone) const SizedBox(width: 12),
               Expanded(
                 child: _buildActionButton(
                   icon: Icons.chat_bubble,
