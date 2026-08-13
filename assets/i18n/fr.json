@@ -1825,5 +1825,10 @@
   "write_review": "Écrire un avis",
   "free_label": "Gratuit",
   "my_orders": "Mes commandes",
-  "app_version": "Version 1.0.0"
+  "app_version": "Version 1.0.0",
+
+  "consumer_profile.title": "Profil utilisateur",
+  "consumer_profile.load_error": "Impossible de charger le profil",
+  "consumer_profile.member_since": "Membre depuis",
+  "consumer_profile.privacy_notice": "Les détails personnels de cet utilisateur sont privés et protégés. Seule son activité publique est visible."
 }

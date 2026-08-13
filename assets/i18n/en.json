@@ -1820,5 +1820,10 @@
   "Traditional": "Traditional",
   "Vegan": "Vegan",
 
-  "app_version": "Version 1.0.0"
+  "app_version": "Version 1.0.0",
+
+  "consumer_profile.title": "User Profile",
+  "consumer_profile.load_error": "Failed to load profile",
+  "consumer_profile.member_since": "Member since",
+  "consumer_profile.privacy_notice": "This user's personal details are private and protected. Only their public activity is visible."
 }

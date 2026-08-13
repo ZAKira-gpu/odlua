@@ -1845,5 +1845,10 @@
 
   "messages": "الرسائل",
   "notification_removed": "تمت إزالة الإشعار",
-  "app_version": "الإصدار 1.0.0"
+  "app_version": "الإصدار 1.0.0",
+
+  "consumer_profile.title": "ملف المستخدم",
+  "consumer_profile.load_error": "فشل تحميل الملف الشخصي",
+  "consumer_profile.member_since": "عضو منذ",
+  "consumer_profile.privacy_notice": "تفاصيل هذا المستخدم الشخصية خاصة ومحمية. يظهر نشاطه العام فقط."
 }
