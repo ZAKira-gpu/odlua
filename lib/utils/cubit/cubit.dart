@@ -75,13 +75,13 @@ class OdluaCubit extends Cubit<OdluaStates> {
     ];
   }
 
-  List<Widget> screens = [
-    const HomeScreen(),
-    const DishesScreen(),
-    const AddDishesScreen(),
-    const ChefDashboardScreen(),
-    const ProfileScreen(),
-  ];
+  List<Widget> get screens => [
+        const HomeScreen(),
+        const DishesScreen(),
+        const AddDishesScreen(),
+        const ChefDashboardScreen(),
+        const ProfileScreen(),
+      ];
 
   bool isDark = false;
   void changeAppMode({bool? fromShared}) {
