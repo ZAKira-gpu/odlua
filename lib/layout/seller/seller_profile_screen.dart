@@ -237,7 +237,6 @@ class _ChefProfileScreenState extends State<ChefProfileScreen> {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          expandedHeight: 260,
           pinned: true,
           backgroundColor: mainColor,
           foregroundColor: Colors.white,
@@ -282,10 +281,9 @@ class _ChefProfileScreenState extends State<ChefProfileScreen> {
                 ),
               ),
           ],
-          flexibleSpace: FlexibleSpaceBar(
-            collapseMode: CollapseMode.pin,
-            background: _buildHeroHeader(name, photoUrl),
-          ),
+        ),
+        SliverToBoxAdapter(
+          child: _buildHeroHeader(name, photoUrl),
         ),
         SliverToBoxAdapter(
           child: Padding(
@@ -418,6 +416,7 @@ class _ChefProfileScreenState extends State<ChefProfileScreen> {
 
   Widget _buildHeroHeader(String name, String? photoUrl) {
     return Container(
+      padding: const EdgeInsets.symmetric(vertical: 24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -430,50 +429,34 @@ class _ChefProfileScreenState extends State<ChefProfileScreen> {
           stops: const [0.0, 0.55, 1.0],
         ),
       ),
-      child: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 16),
-            Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.28),
+                  blurRadius: 24,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Container(
+              width: 96,
+              height: 96,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.28),
-                    blurRadius: 24,
-                    spreadRadius: 2,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
+                border: Border.all(color: Colors.white, width: 3),
               ),
-              child: Container(
-                width: 96,
-                height: 96,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                ),
-                child: ClipOval(
-                  child: (photoUrl != null && photoUrl.isNotEmpty)
-                      ? CachedNetworkImage(
-                          imageUrl: photoUrl,
-                          fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) => Container(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            child: Center(
-                              child: Text(
-                                _getInitials(name),
-                                style: const TextStyle(
-                                  fontSize: 34,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(
+              child: ClipOval(
+                child: (photoUrl != null && photoUrl.isNotEmpty)
+                    ? CachedNetworkImage(
+                        imageUrl: photoUrl,
+                        fit: BoxFit.cover,
+                        errorWidget: (_, __, ___) => Container(
                           color: Colors.white.withValues(alpha: 0.2),
                           child: Center(
                             child: Text(
@@ -486,45 +469,58 @@ class _ChefProfileScreenState extends State<ChefProfileScreen> {
                             ),
                           ),
                         ),
-                ),
+                      )
+                    : Container(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        child: Center(
+                          child: Text(
+                            _getInitials(name),
+                            style: const TextStyle(
+                              fontSize: 34,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
               ),
             ),
-            const SizedBox(height: 14),
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-                letterSpacing: 0.3,
-              ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            name,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              letterSpacing: 0.3,
             ),
-            const SizedBox(height: 6),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Iconsax.personalcard, size: 14, color: Colors.white),
-                  const SizedBox(width: 6),
-                  Text(
-                    'seller_profile'.tr(),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
+          ),
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.35)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Iconsax.personalcard, size: 14, color: Colors.white),
+                const SizedBox(width: 6),
+                Text(
+                  'seller_profile'.tr(),
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
