@@ -32,8 +32,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isProcessing = false;
-  final TextEditingController _specialInstructionsController =
-      TextEditingController();
+
   int _currentStock = 0;
 
   @override
@@ -180,7 +179,7 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
         'totalPrice': widget.dish.price * widget.quantity,
         'currency': widget.dish.currency,
         'status': 'pending',
-        'specialInstructions': _specialInstructionsController.text.trim(),
+
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       };
@@ -421,62 +420,6 @@ class _ConfirmOrderScreenState extends State<ConfirmOrderScreen> {
                         title: 'confirm_order.minutes'.tr(
                             args: [widget.dish.preparationTimeMins.toString()]),
                         subtitle: 'confirm_order.preparation_time'.tr(),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Special Instructions
-                _buildGlassCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'confirm_order.special_instructions'.tr(),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            'confirm_order.optional'.tr(),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade500,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.grey.shade200),
-                        ),
-                        child: TextField(
-                          controller: _specialInstructionsController,
-                          decoration: InputDecoration(
-                            hintText:
-                                'confirm_order.enter_special_instructions_hint'
-                                    .tr(),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.all(16),
-                            hintStyle: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontSize: 14,
-                            ),
-                          ),
-                          maxLines: 3,
-                          style: const TextStyle(fontSize: 14),
-                        ),
                       ),
                     ],
                   ),

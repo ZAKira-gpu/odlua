@@ -267,10 +267,7 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
               _buildDetailRow('order_id'.tr(), orderDoc.id),
               _buildDetailRow(
                   'quantity'.tr(), 'x${safeOrderData['quantity'] ?? 1}'),
-              if (safeOrderData['specialInstructions'] != null &&
-                  safeOrderData['specialInstructions'].toString().isNotEmpty)
-                _buildDetailRow('special_instructions'.tr(),
-                    safeOrderData['specialInstructions'].toString()),
+
               if (safeOrderData['createdAt'] != null)
                 _buildDetailRow('order_date'.tr(),
                     '${DateFormat('MMM dd, yyyy').format(_toDateTime(safeOrderData['createdAt']))} at ${DateFormat('HH:mm').format(_toDateTime(safeOrderData['createdAt']))}'),

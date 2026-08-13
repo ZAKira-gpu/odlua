@@ -406,14 +406,7 @@ class _ChefOrderDetailScreenState extends State<ChefOrderDetailScreen> {
                           _buildInfoRow('quantity'.tr(),
                               'x${(widget.orderData['quantity'] as num?)?.toInt() ?? 1}'),
                           // Price removed
-                          if (widget.orderData['specialInstructions'] != null &&
-                              widget.orderData['specialInstructions']
-                                  .toString()
-                                  .isNotEmpty)
-                            _buildInfoRow(
-                                'special_instructions'.tr(),
-                                widget.orderData['specialInstructions']
-                                    .toString()),
+
                           if (widget.orderData['expiresAt'] != null)
                             _buildInfoRow(
                               'expires_at'.tr(),
