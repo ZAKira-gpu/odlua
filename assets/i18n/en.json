@@ -1794,5 +1794,31 @@
 
   "seller_profile.report_chef": "Report Chef",
   "seller_profile.report_chef_description": "Report this chef if they violate our community guidelines",
-  "seller_profile.chef_reported": "Chef reported successfully"
+  "seller_profile.chef_reported": "Chef reported successfully",
+
+  "email_already_registered": "Email already registered",
+  "invalid_email_format": "Invalid email format",
+  "invalid_phone_number": "Invalid phone number",
+  "messages": "Messages",
+  "name_too_short": "Name is too short",
+  "notification_removed": "Notification removed",
+  "phone_must_start_with_plus": "Phone number must start with +",
+  "registration_failed": "Registration failed",
+  "select_at_least_one_specialty": "Please select at least one specialty",
+  "select_your_culinary_specialties": "Select your culinary specialties",
+
+  "Asian": "Asian",
+  "BBQ": "BBQ",
+  "Bakery": "Bakery",
+  "Desserts": "Desserts",
+  "Fast Food": "Fast Food",
+  "Healthy": "Healthy",
+  "Italian": "Italian",
+  "Mediterranean": "Mediterranean",
+  "Mexican": "Mexican",
+  "Seafood": "Seafood",
+  "Traditional": "Traditional",
+  "Vegan": "Vegan",
+
+  "app_version": "Version 1.0.0"
 }

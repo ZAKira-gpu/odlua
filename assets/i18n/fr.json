@@ -1824,5 +1824,6 @@
   "write_first_review": "Premier avis",
   "write_review": "Écrire un avis",
   "free_label": "Gratuit",
-  "my_orders": "Mes commandes"
+  "my_orders": "Mes commandes",
+  "app_version": "Version 1.0.0"
 }

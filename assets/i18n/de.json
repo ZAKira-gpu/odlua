@@ -1832,5 +1832,6 @@
   "verify": "Verifizieren",
   "verify_otp": "OTP verifizieren",
   "write_first_review": "Erste Bewertung schreiben",
-  "write_review": "Bewertung schreiben"
+  "write_review": "Bewertung schreiben",
+  "app_version": "Version 1.0.0"
 }

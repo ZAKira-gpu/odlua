@@ -1841,5 +1841,9 @@
   "verify": "تحقق",
   "verify_otp": "التحقق من OTP",
   "write_first_review": "كن أول من يكتب مراجعة",
-  "write_review": "اكتب مراجعة"
+  "write_review": "اكتب مراجعة",
+
+  "messages": "الرسائل",
+  "notification_removed": "تمت إزالة الإشعار",
+  "app_version": "الإصدار 1.0.0"
 }

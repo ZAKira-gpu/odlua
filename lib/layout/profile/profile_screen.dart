@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String get _displayName =>
       userData?['name'] as String? ??
       FirebaseAuth.instance.currentUser?.displayName ??
-      'User';
+      'User'.tr();
 
   @override
   void initState() {
@@ -411,7 +411,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 24),
                     Center(
                       child: Text(
-                        'Version 1.0.0',
+                        'app_version'.tr(),
                         style: TextStyle(
                           color: Colors.grey.shade400,
                           fontSize: 12,
