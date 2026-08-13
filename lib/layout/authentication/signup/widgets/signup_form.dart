@@ -336,6 +336,69 @@ class _SignupFormState extends State<SignupForm> {
     );
   }
 
+  void _showDebugBypassDialog(String errorMsg, Map<String, dynamic> signupData) {
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: const Row(
+            children: [
+              Icon(Icons.bug_report, color: Colors.orange),
+              SizedBox(width: 8),
+              Text('Debug Options'),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'Phone verification failed:\n$errorMsg',
+                  style: const TextStyle(color: Colors.red, fontSize: 13),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Since you are running in debug mode, you can bypass the SMS / phone verification step and register using email-only to test the rest of the application.',
+                  style: TextStyle(fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showErrorSnackbar(errorMsg);
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: mainColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+              child: const Text('Register Email-Only'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                setState(() => _isLoading = true);
+                try {
+                  final email = signupData['email']?.toString() ?? '';
+                  final password = signupData['password']?.toString() ?? '';
+                  await _registerWithEmailOnly(email, password, signupData);
+                } catch (e) {
+                  _showErrorSnackbar(e.toString());
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _verifyPhoneNumber(
       String phoneNumber, Map<String, dynamic> signupData) async {
     DebugHelper.log('Verifying phone number: $phoneNumber');
@@ -356,7 +419,11 @@ class _SignupFormState extends State<SignupForm> {
         DebugHelper.log('Phone verification failed: ${e.code} - ${e.message}');
         setState(() => _isLoading = false);
         _phoneVerificationRetryCount++;
-        _handleFirebaseError(e);
+        if (DebugHelper.isDebugMode) {
+          _showDebugBypassDialog(e.message ?? e.code, signupData);
+        } else {
+          _handleFirebaseError(e);
+        }
       },
       codeSent: (String verificationId, int? resendToken) {
         DebugHelper.log('OTP code sent successfully');
