@@ -1132,12 +1132,13 @@ class _ChatConversationScreenState extends State<ChatConversationScreen>
           borderRadius: BorderRadius.circular(24),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
@@ -1184,7 +1185,8 @@ class _ChatConversationScreenState extends State<ChatConversationScreen>
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildAttachmentOption({
@@ -1233,10 +1235,11 @@ class _ChatConversationScreenState extends State<ChatConversationScreen>
           borderRadius: BorderRadius.circular(24),
         ),
         child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 12),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: 12),
               Container(
                 width: 40,
                 height: 4,
@@ -1281,7 +1284,8 @@ class _ChatConversationScreenState extends State<ChatConversationScreen>
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildOptionTile({

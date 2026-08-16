@@ -795,11 +795,12 @@ class _ChefReportSheetState extends State<_ChefReportSheet> {
               padding: EdgeInsets.all(40),
               child: Center(child: CircularProgressIndicator()),
             )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
                   child: Container(
                     width: 40,
                     height: 4,
@@ -848,7 +849,8 @@ class _ChefReportSheetState extends State<_ChefReportSheet> {
                   ),
                   onTap: _chefBlocked ? null : _block,
                 ),
-              ],
+                ],
+              ),
             ),
     );
   }

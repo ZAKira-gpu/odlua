@@ -222,10 +222,11 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
       builder: (context) {
         return Container(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Center(
                 child: Container(
                   width: 40,
@@ -356,7 +357,8 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
               ),
             ],
           ),
-        );
+        ),
+      );
       },
     );
   }
@@ -613,10 +615,11 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
                 top: 20,
                 bottom: MediaQuery.of(context).viewInsets.bottom + 20,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                   Center(
                     child: Container(
                       width: 40,
@@ -759,7 +762,8 @@ class _ClientOrdersScreenState extends State<ClientOrdersScreen> {
                       child: Text('cancel_action'.tr()),
                     ),
                   ),
-                ],
+                  ],
+                ),
               ),
             );
           },

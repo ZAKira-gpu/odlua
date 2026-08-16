@@ -918,10 +918,11 @@ class _SavedAddressesScreenState extends State<SavedAddressesScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 12),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 12),
             Container(
               width: 40,
               height: 4,
@@ -971,7 +972,8 @@ class _SavedAddressesScreenState extends State<SavedAddressesScreen> {
           ],
         ),
       ),
-    );
+    ),
+  );
   }
 
   void _showDeleteConfirmation(VoidCallback? onDelete) {

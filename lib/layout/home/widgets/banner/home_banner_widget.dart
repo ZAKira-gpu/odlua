@@ -340,9 +340,9 @@ class _BannerCard extends StatelessWidget {
               ),
             ),
             if (title.isNotEmpty || subtitle.isNotEmpty)
-              Positioned(
-                left: 16,
-                right: isUrlAction ? 56 : 16,
+              PositionedDirectional(
+                start: 16,
+                end: isUrlAction ? 56 : 16,
                 bottom: 16,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -387,8 +387,8 @@ class _BannerCard extends StatelessWidget {
                 ),
               ),
             if (isUrlAction)
-              Positioned(
-                right: 14,
+              PositionedDirectional(
+                end: 14,
                 bottom: 14,
                 child: Container(
                   width: 34,
@@ -400,8 +400,10 @@ class _BannerCard extends StatelessWidget {
                       color: Colors.white.withValues(alpha: 0.45),
                     ),
                   ),
-                  child: const Icon(
-                    Icons.arrow_forward_rounded,
+                  child: Icon(
+                    context.locale.languageCode == 'ar'
+                        ? Icons.arrow_back_rounded
+                        : Icons.arrow_forward_rounded,
                     color: Colors.white,
                     size: 16,
                   ),

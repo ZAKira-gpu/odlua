@@ -1062,11 +1062,12 @@ class _ReportDishSheetState extends State<_ReportDishSheet> {
               padding: EdgeInsets.all(40),
               child: Center(child: CircularProgressIndicator()),
             )
-          : Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
                   child: Container(
                     width: 40,
                     height: 4,
@@ -1115,7 +1116,8 @@ class _ReportDishSheetState extends State<_ReportDishSheet> {
                   ),
                   onTap: _chefBlocked ? null : _block,
                 ),
-              ],
+                ],
+              ),
             ),
     );
   }
